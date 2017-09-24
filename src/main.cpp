@@ -44,8 +44,8 @@ double polyeval(Eigen::VectorXd coeffs, double x) {
 // Fit a polynomial.
 // Adapted from
 // https://github.com/JuliaMath/Polynomials.jl/blob/master/src/Polynomials.jl#L676-L716
-Eigen::VectorXd polyfit(Eigen::VectorXd xvals, Eigen::VectorXd yvals,
-                        int order) {
+Eigen::VectorXd polyfit(Eigen::VectorXd xvals, Eigen::VectorXd yvals, int order) 
+{
   assert(xvals.size() == yvals.size());
   assert(order >= 1 && order <= xvals.size() - 1);
   Eigen::MatrixXd A(xvals.size(), order + 1);
@@ -98,7 +98,7 @@ int main() {
 
           double steer_value = 0;
           double throttle_value = 0.3;
-		  for (int i = 0 i < ptsx.size(); i++)
+		  for (int i = 0; i < ptsx.size(); i++)
 		  {	  //adapting car location to 0,0	
 			  double shift_x = ptsx[i] - px;
 			  double shift_y = ptsy[i] - py;
@@ -109,6 +109,7 @@ int main() {
 		  //transform the points from array to vector
 		  double* ptrx = &ptsx[0];
 		  Eigen::Map<Eigen::VectorXd> ptsx_transform(ptrx, 6);
+		  double* ptry = &ptsy[0];
 		  Eigen::Map<Eigen::VectorXd> ptsy_transform(ptry, 6);
 
 		  //find the coefficients of a 3rd degree polynomial which fit the points
@@ -127,12 +128,12 @@ int main() {
 		  auto vars = mpc.Solve(state, coeffs);
 
 		  //create the trajectory points
-		  vactor<double> next_x_vals;
-		  vactor<double> next_y_vals;
+		  vector<double> next_x_vals;
+		  vector<double> next_y_vals;
 
 		  double poly_inc = 2.5;
 		  int num_points = 25;
-		  for (i = 0; i < num_points; i++)
+		  for (int i = 0; i < num_points; i++)
 		  {
 			  //the waypoints/reference line (desired trajectory) calculated using the polyfit with the coeffs
 			  next_x_vals.push_back(poly_inc*i);
