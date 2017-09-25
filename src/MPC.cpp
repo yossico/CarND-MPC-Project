@@ -6,8 +6,8 @@
 using CppAD::AD;
 
 // TODO: Set the timestep length and duration
-size_t N = 0;
-double dt = 0;
+size_t N = 10;
+double dt = 0.1;
 
 // This value assumes the model presented in the classroom is used.
 //
@@ -20,6 +20,22 @@ double dt = 0;
 //
 // This is the length from front to CoG that has a similar radius.
 const double Lf = 2.67;
+double ref_cte = 0;
+double ref_espi = 0;
+double ref_v = 100;
+
+size_t x_start = 0;
+size_t y_start = x_start + N;
+size_t psi_start = y_start + N;
+size_t v_start = psi_start + N;
+size_t cte_start = v_start + N;
+size_t epsi_start = cte_start + N;
+size_t delta_start = epsi_start + N;
+size_t a_start = delta_start + N;
+
+
+
+
 
 class FG_eval {
  public:
@@ -29,10 +45,36 @@ class FG_eval {
 
   typedef CPPAD_TESTVECTOR(AD<double>) ADvector;
   void operator()(ADvector& fg, const ADvector& vars) {
-    // TODO: implement MPC
-    // `fg` a vector of the cost constraints, `vars` is a vector of variable values (state & actuators)
-    // NOTE: You'll probably go back and forth between this function and
-    // the Solver function below.
+    // TODO: implement MPC. `fg` is a vector of the cost constraints, `vars` is a vector of variable values (state & actuators)
+    // NOTE: You'll probably go back and forth between this function and the Solver function below.
+	  //reference state cost function as show in class
+	  fg[0] = 0;
+	  for (int i = 0; i < N; i++)
+	  {
+		  fg[0] += 2000 * CppAD::pow(vars[cte_start + i] - ref_cte, 2);		//cte & psi are the two most importat params  
+		  fg[0] += 2000 * CppAD::pow(vars[epsi_start + i] - ref_epsi, 2);	//setting their weight to the highest value of 2000
+		  fg[0] += CppAD::pow(vars[v_start + i] - ref_v, 2);
+
+	  }
+	  for (int i = 0; i < N; i++)
+	  {
+		  fg[0] += 5 * CppAD::pow(vars[delta_start + i], 2);
+		  fg[0] += 5 * CppAD::pow(vars[a_start + i], 2);
+	  }
+	  for (int i = 0; i < N-2; i++)
+	  {
+		  fg[0] += 200 * CppAD::pow(vars[delta_start + i + 1] - vars[delta_start+i], 2); //smoothness of the steering angle also relatively high weight
+		  fg[0] += 10 * CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
+	  }
+
+	  fg[1 + x_start] = vars[x_start];
+	  fg[1 + y_start] = vars[y_start];
+	  fg[1+psi_start] = vars[psi_start];
+	  fg[v_start] = vars[v_start];
+	  fg[cte_start] = vars[cte_start];
+	  fg[epsi_start] = vars[cte_start + N;
+	  fg[delta_start] = vars[epsi_start + N;
+	  fg[a_start] = vars[delta_start
   }
 };
 

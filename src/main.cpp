@@ -130,7 +130,6 @@ int main() {
 		  //create the trajectory points
 		  vector<double> next_x_vals;
 		  vector<double> next_y_vals;
-
 		  double poly_inc = 2.5;
 		  int num_points = 25;
 		  for (int i = 0; i < num_points; i++)
@@ -154,19 +153,21 @@ int main() {
 				  mpc_y_vals.push_back(vars[i]);
 			  }
 		  }
-		  
 		  double Lf = 2.67;
-		  json msgJson;
+		  
+		  
 		  // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
 		  // Otherwise the values will be in between [-deg2rad(25), deg2rad(25] instead of [-1, 1].
+		  json msgJson;
 		  msgJson["steering_angle"] = vars[0]/(deg2rad(25)*Lf);
 		  msgJson["throttle"] = vars[1];
+		  //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
+		  // the points in the simulator are connected by a Yellow line
+		  msgJson["next_x"] = next_x_vals;
+		  msgJson["next_y"] = next_y_vals;
 		  msgJson["mpc_x"] = mpc_x_vals;
           msgJson["mpc_y"] = mpc_y_vals;
-          //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
-          // the points in the simulator are connected by a Yellow line
-          msgJson["next_x"] = next_x_vals;
-          msgJson["next_y"] = next_y_vals;
+          
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
           std::cout << msg << std::endl;
           // Latency
