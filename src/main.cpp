@@ -95,7 +95,6 @@ int main() {
           /*
           * TODO: Calculate steering angle and throttle using MPC.          *
           * Both are in between [-1, 1]. */
-
           double steer_value = 0;
           double throttle_value = 0.3;
 		  for (int i = 0; i < ptsx.size(); i++)
