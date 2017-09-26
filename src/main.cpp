@@ -98,8 +98,7 @@ int main() {
           /*
           * TODO: Calculate steering angle and throttle using MPC.          *
           * Both are in between [-1, 1]. */
-          double steer_value = 0;
-          double throttle_value = 0.3;
+
 		  const int N = ptsx.size();
 		  for (int i = 0; i < N; i++)
 		  {	  //adapting car location to 0,0	
@@ -130,6 +129,9 @@ int main() {
 		  //solve			
 		  auto vars = mpc.Solve(state, coeffs);
 		  std::cout << "finished solve" << std::endl;
+
+		  double steer_value = 0;
+		  double throttle_value = 0.3;
 		  //create the trajectory points
 		  vector<double> next_x_vals;
 		  vector<double> next_y_vals;
