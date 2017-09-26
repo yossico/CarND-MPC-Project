@@ -9,8 +9,11 @@
 #include "MPC.h"
 #include "json.hpp"
 
+using namespace std;
+
 // for convenience
 using json = nlohmann::json;
+
 
 // For converting back and forth between radians and degrees.
 constexpr double pi() { return M_PI; }
@@ -126,7 +129,7 @@ int main() {
 		  
 		  //solve			
 		  auto vars = mpc.Solve(state, coeffs);
-
+		  std::cout << "finished solve" << std::endl;
 		  //create the trajectory points
 		  vector<double> next_x_vals;
 		  vector<double> next_y_vals;
