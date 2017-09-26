@@ -97,7 +97,8 @@ int main() {
           * Both are in between [-1, 1]. */
           double steer_value = 0;
           double throttle_value = 0.3;
-		  for (int i = 0; i < ptsx.size(); i++)
+		  const int N = ptsx.size();
+		  for (int i = 0; i < N; i++)
 		  {	  //adapting car location to 0,0	
 			  double shift_x = ptsx[i] - px;
 			  double shift_y = ptsy[i] - py;
@@ -130,8 +131,7 @@ int main() {
 		  vector<double> next_x_vals;
 		  vector<double> next_y_vals;
 		  double poly_inc = 2.5;
-		  int num_points = 25;
-		  for (int i = 0; i < num_points; i++)
+		  for (int i = 0; i < N; i++)
 		  {
 			  //the waypoints/reference line (desired trajectory) calculated using the polyfit with the coeffs
 			  next_x_vals.push_back(poly_inc*i);
