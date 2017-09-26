@@ -7,7 +7,7 @@ using CppAD::AD;
 
 // TODO: Set the timestep length and duration - set as default (10,0.1) to predisct 1 second into the future
 size_t N = 10; // 10 timestamps
-double dt = 0.1; //0.1 second between timestamps
+double DT = 0.1; //0.1 second between timestamps
 
 // This value assumes the model presented in the classroom is used.
 // It was obtained by measuring the radius formed by running the vehicle in the
@@ -45,7 +45,7 @@ class FG_eval {
 	  for (int i = 0; i < N; i++)
 	  {
 		  fg[0] += 2000 * CppAD::pow(vars[cte_start + i] - ref_cte, 2);		//cte & psi are the two most importat params  
-		  fg[0] += 2000 * CppAD::pow(vars[epsi_start + i] - ref_epsi, 2);	//setting their weight to the highest value of 2000
+		  fg[0] += 2000 * CppAD::pow(vars[epsi_start + i] - ref_espi, 2);	//setting their weight to the highest value of 2000
 		  fg[0] += CppAD::pow(vars[v_start + i] - ref_v, 2);
 
 	  }
