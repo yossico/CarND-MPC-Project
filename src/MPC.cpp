@@ -35,6 +35,7 @@ class FG_eval {
   // Fitted polynomial coefficients
   Eigen::VectorXd coeffs;
   FG_eval(Eigen::VectorXd coeffs) { this->coeffs = coeffs; }
+  std::cout << "vars \n " << vars << std::endl;
 
   typedef CPPAD_TESTVECTOR(AD<double>) ADvector;
   void operator()(ADvector& fg, const ADvector& vars) {
@@ -134,7 +135,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   size_t n_vars = N * 6 + (N - 1) * 2;
   // Set the number of constraints
   size_t n_constraints = N * 6;
-  std::cout << "state  coeffs " << state << coeffs << std::endl;
+  std::cout << "state \n " << state <<"coeffs \n" << coeffs << std::endl;
 
   // Initial value of the independent variables. SHOULD BE 0 besides initial state.
   Dvector vars(n_vars);
