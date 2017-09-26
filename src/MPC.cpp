@@ -119,6 +119,12 @@ MPC::~MPC() {}
 vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   bool ok = true;
   size_t i;
+  const double x = state[0];
+  const double y = state[1];
+  const double psi = state[2];
+  const double v = state[3];
+  const double cte = state[4];
+  const double epsi = state[5];
   typedef CPPAD_TESTVECTOR(double) Dvector;
 
   // TODO: Set the number of model variables (includes both states and inputs).
@@ -161,8 +167,6 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
 	  vars_upperbound[i] = MAXTHR;
   }
   // Lower and upper limits for the constraints Should be 0 besides initial state.
-  Dvector constraints_lowerbound(n_constraints);
-  Dvector constraints_upperbound(n_constraints);
   for (int i = 0; i < n_constraints; i++) {
 	  constraints_lowerbound[i] = 0;
 	  constraints_upperbound[i] = 0;
