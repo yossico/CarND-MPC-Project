@@ -147,7 +147,7 @@ int main() {
 		  vector<double> mpc_y_vals;
 		  for (int i = 2; i < vars.size(); i++)
 		  {
-			  if (i % 2 == 0)
+			  if (i%2 == 0)
 			  {
 				  mpc_x_vals.push_back(vars[i]);
 			  }
@@ -180,7 +180,7 @@ int main() {
           // around the track with 100ms latency.          //
           // NOTE: REMEMBER TO SET THIS TO 100 MILLISECONDS BEFORE
           // SUBMITTING.
-          this_thread::sleep_for(chrono::milliseconds(100));
+          //this_thread::sleep_for(chrono::milliseconds(100));
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
         }
       } else {
