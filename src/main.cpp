@@ -92,8 +92,9 @@ int main() {
           vector<double> ptsy = j[1]["ptsy"];
           double px = j[1]["x"];
           double py = j[1]["y"];
-          double psi = j[1]["psi"];
-		  const double v = j[1]["speed"];		 
+          double psi = j[1]["psi"];		  
+		  const double v_mph = j[1]["speed"];
+		  const double v = v_raw * 0.447;// mph to m/s
 		  const double steering_angle = j[1]["steering_angle"];
 		  const double throttle = j[1]["throttle"];
 
@@ -102,6 +103,7 @@ int main() {
           * Both are in between [-1, 1]. */
 
 		  const int N = ptsx.size();  
+		  //OriginTransform()
 		  for (int i = 0; i < N; i++)
 		  {	  //adapting car location to 0,0	
 			  double shift_x = ptsx[i] - px;
@@ -122,10 +124,17 @@ int main() {
 		  double cte = polyeval(coeffs, 0);
 		  //calculate the orientation as atan of coeff[1] (the rest of the variables in the calculation are zeros)
 		  double epsi = -atan(coeffs[1]);
-		            	  
+
+		  // Kinematic model used to predict vehicle state at current_time +dt 
+		  const double px_act = v * dt;
+		  const double py_act = 0;
+		  const double psi_act = -v * steering_angle * dt / Lf;
+		  const double v_act = v + throttle * dt;
+		  const double cte_act = cte + v * sin(epsi) * dt;
+		  const double epsi_act = epsi + psi_act;
 		  Eigen::VectorXd state(6);
 		  //set the vechicle state
-		  state << 0, 0, 0, v, cte, epsi;
+		  state << px_act, py_act, psi_act, v_act, cte_act, epsi_act;
 		  
 		  //solve			
 		  auto vars = mpc.Solve(state, coeffs);
@@ -163,7 +172,7 @@ int main() {
 		  // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
 		  // Otherwise the values will be in between [-deg2rad(25), deg2rad(25] instead of [-1, 1].
 		  json msgJson;
-		  msgJson["steering_angle"] = vars[0]/(deg2rad(25)*Lf); //steering angle transformed to radian -25 - 25 deg 
+		  msgJson["steering_angle"] = -vars[0]/(deg2rad(25)*Lf); //steering angle transformed to radian -25 - 25 deg 
 		  msgJson["throttle"] = vars[1];   //throttle value
 		  //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
 		  // the points in the simulator are connected by a Yellow line
@@ -181,7 +190,7 @@ int main() {
           // around the track with 100ms latency.          //
           // NOTE: REMEMBER TO SET THIS TO 100 MILLISECONDS BEFORE
           // SUBMITTING.
-          //this_thread::sleep_for(chrono::milliseconds(100));
+          this_thread::sleep_for(chrono::milliseconds(100));
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
         }
       } else {
