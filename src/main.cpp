@@ -20,6 +20,7 @@ constexpr double pi() { return M_PI; }
 double deg2rad(double x) { return x * pi() / 180; }
 double rad2deg(double x) { return x * 180 / pi(); }
 const double dt = 0.1; //0.1 second between timestamps
+const double LF = 2.67; //0.1 second between timestamps
 
 
 
