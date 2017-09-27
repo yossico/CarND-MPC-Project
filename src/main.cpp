@@ -19,6 +19,9 @@ using json = nlohmann::json;
 constexpr double pi() { return M_PI; }
 double deg2rad(double x) { return x * pi() / 180; }
 double rad2deg(double x) { return x * 180 / pi(); }
+const double dt = 0.1; //0.1 second between timestamps
+
+
 
 // Checks if the SocketIO event has JSON data.
 // If there is data the JSON object in string format will be returned,
@@ -94,7 +97,7 @@ int main() {
           double py = j[1]["y"];
           double psi = j[1]["psi"];		  
 		  const double v_mph = j[1]["speed"];
-		  const double v = v_raw * 0.447;// mph to m/s
+		  const double v = v_mph * 0.447;// mph to m/s
 		  const double steering_angle = j[1]["steering_angle"];
 		  const double throttle = j[1]["throttle"];
 
@@ -128,7 +131,7 @@ int main() {
 		  // Kinematic model used to predict vehicle state at current_time +dt 
 		  const double px_act = v * dt;
 		  const double py_act = 0;
-		  const double psi_act = -v * steering_angle * dt / Lf;
+		  const double psi_act = -v * steering_angle * dt / LF;
 		  const double v_act = v + throttle * dt;
 		  const double cte_act = cte + v * sin(epsi) * dt;
 		  const double epsi_act = epsi + psi_act;

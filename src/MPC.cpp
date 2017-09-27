@@ -9,7 +9,7 @@ using CppAD::AD;
 
 // TODO: Set the timestep length and duration - set as default (10,0.1) to predisct 1 second into the future
 size_t N = NUMBER_OF_STEPS; // (20 timestamps)
-double dt = 0.1; //0.1 second between timestamps
+const double dt = 0.1; //0.1 second between timestamps
 
 // This value assumes the model presented in the classroom is used.
 // It was obtained by measuring the radius formed by running the vehicle in the
@@ -47,8 +47,8 @@ class FG_eval {
 	  fg[0] = 0;
 	  for (int i = 0; i < N; i++)
 	  {
-		  fg[0] += 2000 * CppAD::pow(vars[cte_start + i] - ref_cte, 2);		//cte & psi are the two most importat params  
-		  fg[0] += 2000 * CppAD::pow(vars[epsi_start + i] - epsi_start, 2);	//setting their weight to the highest value of 2000
+		  fg[0] += 500 * CppAD::pow(vars[cte_start + i] - ref_cte, 2);		//cte & psi are the two most importat params  
+		  fg[0] += 500 * CppAD::pow(vars[epsi_start + i] - epsi_start, 2);	//setting their weight to the highest value of 2000
 		  fg[0] += CppAD::pow(vars[v_start + i] - ref_v, 2);
 
 	  }
@@ -59,7 +59,7 @@ class FG_eval {
 	  }
 	  for (int i = 0; i < N-2; i++)
 	  {
-		  fg[0] += 200 * CppAD::pow(vars[delta_start + i + 1] - vars[delta_start+i], 2); //smoothness of the steering angle also relatively high weight
+		  fg[0] += 400 * CppAD::pow(vars[delta_start + i + 1] - vars[delta_start+i], 2); //smoothness of the steering angle also relatively high weight
 		  fg[0] += 10 * CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
 	  }
 
