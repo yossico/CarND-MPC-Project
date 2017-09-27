@@ -1,4 +1,4 @@
-# CarND-Controls-MPC
+﻿# CarND-Controls-MPC
 Self-Driving Car Engineer Nanodegree Program
 
 ---
@@ -52,6 +52,25 @@ Self-Driving Car Engineer Nanodegree Program
 * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page). This is already part of the repo so you shouldn't have to worry about it.
 * Simulator. You can download these from the [releases tab](https://github.com/udacity/self-driving-car-sim/releases).
 * Not a dependency but read the [DATA.md](./DATA.md) for a description of the data sent back from the simulator.
+
+MPC steps
+1. Set N and dt.
+2. Fit the polynomial to the waypoints in line 115 
+	coeffs = polyfit(ptsx_transform, ptsy_transform, 3)
+	
+3. Calculate initial cross track error and orientation error values using polyeval(coeffs, 0) & -atan(coeffs[1]);
+
+4. Define the components of the cost function (state, actuators, weights etc). This is done in MPC FG_eval class
+
+5. Define the model constraints. 
+
+These are the state update equations defined in the Vehicle Models module.
+
+Ipopt is the tool we'll be using to optimize the control inputs [δ​1​​,a1,...,δN−1,a​N−1​​]. 
+It's able to find locally optimal values while keeping the constraints set directly to the actuators and the constraints defined by the vehicle model. 
+Ipopt requires we give it the jacobians and hessians we provide it using the CppAD  library.
+
+
 
 
 ## Basic Build Instructions
