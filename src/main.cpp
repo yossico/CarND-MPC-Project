@@ -93,7 +93,10 @@ int main() {
           double px = j[1]["x"];
           double py = j[1]["y"];
           double psi = j[1]["psi"];
-          double v = j[1]["speed"];
+		  const double v_raw = j[1]["speed"];
+		  //const double v = v_raw * 0.447;// mph to m/s
+		  const double steering_angle = j[1]["steering_angle"];
+		  const double throttle = j[1]["throttle"];
 
           /*
           * TODO: Calculate steering angle and throttle using MPC.          *
@@ -114,24 +117,24 @@ int main() {
 		  double* ptry = &ptsy[0];
 		  Eigen::Map<Eigen::VectorXd> ptsy_transform(ptry, 6);
 
-		  //find the coefficients of a 3rd degree polynomial which fit the points
+		  //find the coefficients of a 3rd degree polynomial which fit the waypoints
 		  auto coeffs = polyfit(ptsx_transform, ptsy_transform, 3);
-
-		  //calculate the cross-track-error using polyeval
+		   //calculate the cross-track-error using polyeval
 		  double cte = polyeval(coeffs, 0);
 		  //calculate the orientation as atan of coeff[1] (the rest of the variables in the calculation are zeros)
 		  double epsi = -atan(coeffs[1]);
 		            	  
 		  Eigen::VectorXd state(6);
 		  //set the vechicle state
-		  state << 0, 0, 0, v, cte, epsi;
+		  state << 0, 0, 0, v_raw, cte, epsi;
 		  
 		  //solve			
 		  auto vars = mpc.Solve(state, coeffs);
 		  std::cout << "finished solve" << std::endl;
 
-		  double steer_value = 0;
-		  double throttle_value = 0.3;
+	
+
+
 		  //create the trajectory points
 		  vector<double> next_x_vals;
 		  vector<double> next_y_vals;
@@ -142,7 +145,7 @@ int main() {
 			  next_x_vals.push_back(poly_inc*i);
 			  next_y_vals.push_back(polyeval(coeffs, poly_inc*i));
 		  }
-		  
+ 
 		  //Display the MPC predicted trajectory (the line we are going to drive on) 
 		  vector<double> mpc_x_vals;
 		  vector<double> mpc_y_vals;
@@ -163,8 +166,8 @@ int main() {
 		  // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
 		  // Otherwise the values will be in between [-deg2rad(25), deg2rad(25] instead of [-1, 1].
 		  json msgJson;
-		  msgJson["steering_angle"] = vars[0]/(deg2rad(25)*Lf);
-		  msgJson["throttle"] = vars[1];
+		  msgJson["steering_angle"] = vars[0]/(deg2rad(25)*Lf); //steering angle transformed to radian -25 - 25 deg 
+		  msgJson["throttle"] = vars[1];   //throttle value
 		  //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
 		  // the points in the simulator are connected by a Yellow line
 		  msgJson["next_x"] = next_x_vals;

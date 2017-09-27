@@ -10,6 +10,7 @@ using namespace std;
 #define DED25RAD 0.436332 // 25 deg in rad, used as delta bound
 #define MAXTHR 1.0 // Maximal a value
 #define BOUND 1.0e3 // Bound value for other variables
+#define NUMBER_OF_STEPS 20
 
 class MPC {
  public:

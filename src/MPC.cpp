@@ -8,7 +8,7 @@ using namespace std;
 using CppAD::AD;
 
 // TODO: Set the timestep length and duration - set as default (10,0.1) to predisct 1 second into the future
-size_t N = 10; // 10 timestamps
+size_t N = NUMBER_OF_STEPS; // (20 timestamps)
 double dt = 0.1; //0.1 second between timestamps
 
 // This value assumes the model presented in the classroom is used.
@@ -30,7 +30,7 @@ size_t v_start = psi_start + N;
 size_t cte_start = v_start + N;
 size_t epsi_start = cte_start + N;
 size_t delta_start = epsi_start + N;
-size_t a_start = delta_start + N;
+size_t a_start = delta_start + N - 1;
 
 class FG_eval {
  public:
