@@ -102,14 +102,14 @@ int main() {
           * TODO: Calculate steering angle and throttle using MPC.          *
           * Both are in between [-1, 1]. */
 
-		  const int N = ptsx.size();
+		  const int N = ptsx.size();  
 		  for (int i = 0; i < N; i++)
 		  {	  //adapting car location to 0,0	
 			  double shift_x = ptsx[i] - px;
 			  double shift_y = ptsy[i] - py;
 			  //adapting path points to the new location of the car as 0,0
 			  ptsx[i] = (shift_x*cos(0 - psi) - shift_y*sin(0 - psi));
-			  ptsy[i] = (shift_x*sin(0 - psi) - shift_y*cos(0 - psi));
+			  ptsy[i] = (shift_x*sin(0 - psi) + shift_y*cos(0 - psi));
 		  }
 		  //transform the points from array to vector
 		  double* ptrx = &ptsx[0];
@@ -132,10 +132,7 @@ int main() {
 		  auto vars = mpc.Solve(state, coeffs);
 		  std::cout << "finished solve" << std::endl;
 
-	
-
-
-		  //create the trajectory points
+			  //create the trajectory points
 		  vector<double> next_x_vals;
 		  vector<double> next_y_vals;
 		  double poly_inc = 2.5;

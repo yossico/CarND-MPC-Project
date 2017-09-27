@@ -143,7 +143,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   for (int i = 0; i < n_vars; i++) {
     vars[i] = 0;
   }
-  std::cout << "point 1" << std::endl;
+
   // TODO: Set lower and upper limits for variables.
   Dvector vars_lowerbound(n_vars);
   Dvector vars_upperbound(n_vars);
@@ -186,7 +186,6 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   constraints_upperbound[cte_start] = cte;
   constraints_upperbound[epsi_start] = epsi;
 
-  std::cout << "point 2" << std::endl;
   // object that computes objective and constraints
   FG_eval fg_eval(coeffs);
   // options for IPOPT solver
@@ -206,7 +205,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
 
   // place to return solution
   CppAD::ipopt::solve_result<Dvector> solution;
-  std::cout << "point 3" << std::endl;
+
   // solve the problem
   CppAD::ipopt::solve<Dvector, FG_eval>(
 	  options, vars, vars_lowerbound, vars_upperbound, constraints_lowerbound,
