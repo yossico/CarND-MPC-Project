@@ -20,7 +20,7 @@ double dt = 0.1; //0.1 second between timestamps
 // This is the length from front to CoG that has a similar radius.
 const double Lf = 2.67;
 double ref_cte = 0;
-double ref_espi = 0;
+double ref_epsi = 0;
 double ref_v = 25;//was 100 in walkthough try to be a bit safer
 
 size_t x_start = 0;
@@ -48,7 +48,7 @@ class FG_eval {
 	  for (int i = 0; i < N; i++)
 	  {
 		  fg[0] += 2000 * CppAD::pow(vars[cte_start + i] - ref_cte, 2);		//cte & psi are the two most importat params  
-		  fg[0] += 2000 * CppAD::pow(vars[epsi_start + i] - ref_espi, 2);	//setting their weight to the highest value of 2000
+		  fg[0] += 2000 * CppAD::pow(vars[epsi_start + i] - epsi_start, 2);	//setting their weight to the highest value of 2000
 		  fg[0] += CppAD::pow(vars[v_start + i] - ref_v, 2);
 
 	  }
@@ -108,7 +108,7 @@ class FG_eval {
 		  fg[2 + psi_start + i] = psi1 - (psi0 + v0 * delta0 / Lf * dt);
 		  fg[2 + v_start + i] = v1 - (v0 + a0 * dt);
 		  fg[2 + cte_start + i] = cte1 - ((f0 - y0) + (v0 * CppAD::sin(epsi0) * dt));
-		  fg[2 + epsi_start + i] = epsi1 - ((psi0 - psides0) + v0 * delta0 / Lf * dt);
+		  fg[2 + epsi_start + i] = epsi1 - ((psi0 - psides0) - v0 * delta0 / Lf * dt);
 	  }
   }
 };
