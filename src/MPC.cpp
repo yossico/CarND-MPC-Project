@@ -94,12 +94,12 @@ class FG_eval {
 		  AD<double> a0 = vars[a_start + i];
 
 		  AD<double> f0 = 0.0;
-		  for (int i = 0; i < coeffs.size(); i++) {
-			  f0 += coeffs[i] * CppAD::pow(x0, i);
+		  for (int j = 0; j < coeffs.size(); j++) {
+			  f0 += coeffs[j] * CppAD::pow(x0, i);
 		  }
 		  AD<double> psides0 = 0.0;
-		  for (int i = 1; i < coeffs.size(); i++) {
-			  psides0 += i*coeffs[i] * CppAD::pow(x0, i - 1); // f'(x0)
+		  for (int j = 1; j < coeffs.size(); i++) {
+			  psides0 += j*coeffs[j] * CppAD::pow(x0, j - 1); // f'(x0)
 		  }
 		  psides0 = CppAD::atan(psides0);
 

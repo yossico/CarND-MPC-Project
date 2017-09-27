@@ -147,7 +147,7 @@ int main() {
 		  vector<double> mpc_y_vals;
 		  for (int i = 2; i < vars.size(); i++)
 		  {
-			  std::cout <<"i" << i << std::endl;
+			  //std::cout <<"i" << i << std::endl;
 			  if (i%2 == 0)
 			  {
 				  mpc_x_vals.push_back(vars[i]);
