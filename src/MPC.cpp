@@ -225,7 +225,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
 	  result.push_back(solution.x[x_start + i + 1]);
 	  result.push_back(solution.x[y_start + i + 1]);
   }
-  vector<double> result;
+  
   // TODO: Return the first actuator values. The variables can be accessed with `solution.x[i]`.
   return result;
   

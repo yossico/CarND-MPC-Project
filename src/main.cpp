@@ -93,8 +93,7 @@ int main() {
           double px = j[1]["x"];
           double py = j[1]["y"];
           double psi = j[1]["psi"];
-		  const double v_raw = j[1]["speed"];
-		  //const double v = v_raw * 0.447;// mph to m/s
+		  const double v = j[1]["speed"];		 
 		  const double steering_angle = j[1]["steering_angle"];
 		  const double throttle = j[1]["throttle"];
 
@@ -126,7 +125,7 @@ int main() {
 		            	  
 		  Eigen::VectorXd state(6);
 		  //set the vechicle state
-		  state << 0, 0, 0, v_raw, cte, epsi;
+		  state << 0, 0, 0, v, cte, epsi;
 		  
 		  //solve			
 		  auto vars = mpc.Solve(state, coeffs);
@@ -136,7 +135,7 @@ int main() {
 		  vector<double> next_x_vals;
 		  vector<double> next_y_vals;
 		  double poly_inc = 2.5;
-		  for (int i = 0; i < N; i++)
+		  for (int i = 0; i < NUMBER_OF_STEPS; i++)
 		  {
 			  //the waypoints/reference line (desired trajectory) calculated using the polyfit with the coeffs
 			  next_x_vals.push_back(poly_inc*i);
