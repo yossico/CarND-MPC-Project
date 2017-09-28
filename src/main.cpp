@@ -113,8 +113,8 @@ int main() {
 		  VectorXd ptsyT(N);
 		  for (int i = 0; i < N; i++)
 		  {	  //adapting car location to 0,0	
-			  const double shift_x = ptsxT[i] - px;
-			  const double shift_y = ptsyT[i] - py;
+			  const double shift_x = ptsx[i] - px;
+			  const double shift_y = ptsy[i] - py;
 			  //adapting path points to the new location of the car as 0,0
 			  ptsxT[i] = (shift_x*cos(0 - psi) - shift_y*sin(0 - psi));
 			  ptsyT[i] = (shift_x*sin(0 - psi) + shift_y*cos(0 - psi));
