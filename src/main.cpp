@@ -10,6 +10,7 @@
 #include "json.hpp"
 
 using namespace std;
+using namespace Eigen;
 
 // for convenience
 using json = nlohmann::json;
@@ -40,7 +41,7 @@ string hasData(string s) {
 }
 
 // Evaluate a polynomial.
-double polyeval(Eigen::VectorXd coeffs, double x) {
+double polyeval(VectorXd coeffs, double x) {
   double result = 0.0;
   for (int i = 0; i < coeffs.size(); i++) {
     result += coeffs[i] * pow(x, i);
@@ -51,7 +52,7 @@ double polyeval(Eigen::VectorXd coeffs, double x) {
 // Fit a polynomial.
 // Adapted from
 // https://github.com/JuliaMath/Polynomials.jl/blob/master/src/Polynomials.jl#L676-L716
-Eigen::VectorXd polyfit(Eigen::VectorXd xvals, Eigen::VectorXd yvals, int order) 
+Eigen::VectorXd polyfit(VectorXd xvals, VectorXd yvals, int order) 
 {
   assert(xvals.size() == yvals.size());
   assert(order >= 1 && order <= xvals.size() - 1);
@@ -108,15 +109,15 @@ int main() {
 
 		  const int N = ptsx.size();  
 		  //OriginTransform()
-		  VectorXd ptsx_transform(N);
-		  VectorXd ptsy_transform(N);
+		  VectorXd ptsx(N);
+		  VectorXd ptsy(N);
 		  for (int i = 0; i < N; i++)
 		  {	  //adapting car location to 0,0	
-			  double shift_x = ptsx[i] - px;
-			  double shift_y = ptsy[i] - py;
+			  const double shift_x = ptsx[i] - px;
+			  const double shift_y = ptsy[i] - py;
 			  //adapting path points to the new location of the car as 0,0
-			  VectorXd ptsx_transform[i] = (shift_x*cos(0 - psi) - shift_y*sin(0 - psi));
-			  VectorXd ptsy_transform(N)[i] = (shift_x*sin(0 - psi) + shift_y*cos(0 - psi));
+			  ptsx[i] = (shift_x*cos(0 - psi) - shift_y*sin(0 - psi));
+			  ptsy[i] = (shift_x*sin(0 - psi) + shift_y*cos(0 - psi));
 		  }
 
 		  //find the coefficients of a 3rd degree polynomial which fit the waypoints
