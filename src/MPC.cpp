@@ -15,10 +15,10 @@ const double dt = 0.1; //0.1 second between timestamps
 // It was obtained by measuring the radius formed by running the vehicle in the
 // simulator around in a circle with a constant steering angle and velocity on a
 // flat terrain.
-// Lf was tuned until the the radius formed by the simulating the model
+// LF was tuned until the the radius formed by the simulating the model
 // presented in the classroom matched the previous radius.
 // This is the length from front to CoG that has a similar radius.
-const double Lf = 2.67;
+const double LF = 2.67;
 double ref_cte = 0;
 double ref_epsi = 0;
 double ref_v = 25;//was 100 in walkthough try to be a bit safer
@@ -100,10 +100,10 @@ class FG_eval {
 		 
 		  fg[2 + x_start + i] = x1 - (x0 + v0 * CppAD::cos(psi0) * dt);
 		  fg[2 + y_start + i] = y1 - (y0 + v0 * CppAD::sin(psi0) * dt);
-		  fg[2 + psi_start + i] = psi1 - (psi0 + v0 * delta0 / Lf * dt);
+		  fg[2 + psi_start + i] = psi1 - (psi0 + v0 * delta0 / LF * dt);
 		  fg[2 + v_start + i] = v1 - (v0 + a0 * dt);
 		  fg[2 + cte_start + i] = cte1 - ((f0 - y0) + (v0 * CppAD::sin(epsi0) * dt));
-		  fg[2 + epsi_start + i] = epsi1 - ((psi0 - psides0) - v0 * delta0 / Lf * dt);
+		  fg[2 + epsi_start + i] = epsi1 - ((psi0 - psides0) - v0 * delta0 / LF * dt);
 	  }
   }
 };
@@ -153,8 +153,8 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // The upper and lower limits of delta are set to -25 and 25
   // degrees (values in radians).
   for (int i = delta_start; i < a_start; i++) {
-	  vars_lowerbound[i] = -DED25RAD*Lf;
-	  vars_upperbound[i] = DED25RAD*Lf;
+	  vars_lowerbound[i] = -DED25RAD*LF;
+	  vars_upperbound[i] = DED25RAD*LF;
   }
   // Acceleration/decceleration upper and lower limits
   for (int i = a_start; i < n_vars; i++) {
