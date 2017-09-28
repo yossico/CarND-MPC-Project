@@ -153,7 +153,7 @@ int main() {
 		  vector<double> next_x_vals;
 		  vector<double> next_y_vals;
 		  double poly_inc = 2.5;
-		  for (int i = 0; i < NUMBER_OF_STEPS; i++)
+		  for (int i = 0; i < ptsx.size(); i++)
 		  {
 			  //the waypoints/reference line (desired trajectory) calculated using the polyfit with the coeffs
 			  next_x_vals.push_back(poly_inc*i);
