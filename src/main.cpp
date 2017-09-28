@@ -109,19 +109,19 @@ int main() {
 
 		  const int N = ptsx.size();  
 		  //OriginTransform()
-		  VectorXd ptsx(N);
-		  VectorXd ptsy(N);
+		  VectorXd ptsxT(N);
+		  VectorXd ptsyT(N);
 		  for (int i = 0; i < N; i++)
 		  {	  //adapting car location to 0,0	
-			  const double shift_x = ptsx[i] - px;
-			  const double shift_y = ptsy[i] - py;
+			  const double shift_x = ptsxT[i] - px;
+			  const double shift_y = ptsyT[i] - py;
 			  //adapting path points to the new location of the car as 0,0
-			  ptsx[i] = (shift_x*cos(0 - psi) - shift_y*sin(0 - psi));
-			  ptsy[i] = (shift_x*sin(0 - psi) + shift_y*cos(0 - psi));
+			  ptsxT[i] = (shift_x*cos(0 - psi) - shift_y*sin(0 - psi));
+			  ptsyT[i] = (shift_x*sin(0 - psi) + shift_y*cos(0 - psi));
 		  }
 
 		  //find the coefficients of a 3rd degree polynomial which fit the waypoints
-		  auto coeffs = polyfit(ptsx_transform, ptsy_transform, 3);
+		  auto coeffs = polyfit(ptsxT, ptsyT, 3);
 		   //calculate the cross-track-error using polyeval
 		  double cte = coeffs[0];// polyeval(coeffs, 0);
 		  //calculate the orientation as atan of coeff[1] (the rest of the variables in the calculation are zeros)
