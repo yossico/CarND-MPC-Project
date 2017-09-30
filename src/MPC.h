@@ -4,6 +4,8 @@
 #include <vector>
 #include "Eigen-3.3/Eigen/Core"
 
+#define DT 0.1 // time step duration dt in s 
+
 using namespace std;
 
 // Set lower and upper limits for variables.
@@ -12,6 +14,9 @@ using namespace std;
 #define BOUND 1.0e19 // Bound value for other variables
 #define NUMBER_OF_STEPS 10
 
+#define REF_CTE 0
+#define REF_EPSI 0
+#define REF_V 77.5
 
 // Set weights parameters for the cost function
 #define W_CTE 8.4
