@@ -44,22 +44,22 @@ class FG_eval {
     // NOTE: You'll probably go back and forth between this function and the Solver function below.
 	  //reference state cost function as show in class
 	  fg[0] = 0;
-	  for (int i = 0; i < N; i++)
-	  {
-		  fg[0] += 9 * CppAD::pow(vars[cte_start + i] - ref_cte, 2);		//cte & psi are the two most importat params  
-		  fg[0] += 0.32 * CppAD::pow(vars[epsi_start + i] - epsi_start, 2);	//setting their weight to the highest value of 2000
-		  fg[0] += 0.261*CppAD::pow(vars[v_start + i] - ref_v, 2);
+	  for (int i = 0; i < N; i++) {
+		  fg[0] += W_CTE * CppAD::pow(vars[cte_start + i] - REF_CTE, 2);
+		  fg[0] += W_EPSI * CppAD::pow(vars[epsi_start + i] - REF_EPSI, 2);
+		  fg[0] += W_V * CppAD::pow(vars[v_start + i] - REF_V, 2);
+	  }
 
+	  // Minimize the use of actuators.
+	  for (int i = 0; i < N - 1; i++) {
+		  fg[0] += W_DELTA * CppAD::pow(vars[delta_start + i], 2);
+		  fg[0] += W_A * CppAD::pow(vars[a_start + i], 2);
 	  }
-	  for (int i = 0; i < N-1; i++)
-	  {
-		  fg[0] += 500 * CppAD::pow(vars[delta_start + i], 2);
-		  fg[0] += 17 * CppAD::pow(vars[a_start + i], 2);
-	  }
-	  for (int i = 0; i < N-2; i++)
-	  {
-		  fg[0] += 0.01 * CppAD::pow(vars[delta_start + i + 1] - vars[delta_start+i], 2); //smoothness of the steering angle also relatively high weight
-		  fg[0] += 0.00001 * CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
+
+	  // Minimize the value gap between sequential actuations.
+	  for (int i = 0; i < N - 2; i++) {
+		  fg[0] += W_DDELTA * CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
+		  fg[0] += W_DA * CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
 	  }
 
 	  fg[1 + x_start] = vars[x_start];
@@ -97,12 +97,12 @@ class FG_eval {
 		  f0 += coeffs[0] * coeffs[1] * x0 + coeffs[2] * x0*x0 + coeffs[3] * x0*x0*x0;
 		  psides0 += CppAD::atan(3*coeffs[3]*x0*x0 + 2*coeffs[2]*x0+ coeffs[1]);
 		 
-		  fg[2 + x_start + i] = x1 - (x0 + v0 * CppAD::cos(psi0) * dt);
-		  fg[2 + y_start + i] = y1 - (y0 + v0 * CppAD::sin(psi0) * dt);
-		  fg[2 + psi_start + i] = psi1 - (psi0 + v0 * delta0 / LF * dt);
-		  fg[2 + v_start + i] = v1 - (v0 + a0 * dt);
-		  fg[2 + cte_start + i] = cte1 - ((f0 - y0) + (v0 * CppAD::sin(epsi0) * dt));
-		  fg[2 + epsi_start + i] = epsi1 - ((psi0 - psides0) - v0 * delta0 / LF * dt);
+		  fg[2 + x_start + i] = x1 - (x0 + v0 * CppAD::cos(psi0) * DT);
+		  fg[2 + y_start + i] = y1 - (y0 + v0 * CppAD::sin(psi0) * DT);
+		  fg[2 + psi_start + i] = psi1 - (psi0 + v0 * delta0 / LF * DT);
+		  fg[2 + v_start + i] = v1 - (v0 + a0 * DT);
+		  fg[2 + cte_start + i] = cte1 - ((f0 - y0) + (v0 * CppAD::sin(epsi0) * DT));
+		  fg[2 + epsi_start + i] = epsi1 - ((psi0 - psides0) + v0 * delta0 / LF * DT);
 	  }
   }
 };
