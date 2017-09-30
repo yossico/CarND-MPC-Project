@@ -141,10 +141,9 @@ int main() {
 		  //solve			
 		  vector<double> mpc_solution = mpc.Solve(state, coeffs);
 		  std::cout << "finished solve" << std::endl;
-		  
-		  double steer_value = mpc_solution[0] / deg2rad(25); // convert to [-1..1] range
-		  double throttle_value = mpc_solution[1];
 
+		  double steer_value = mpc_solution[0] / deg2rad(25); // divide by deg2rad(25), convert to [-1..1] range
+		  double throttle_value = mpc_solution[1];
 		  //Display the MPC predicted trajectory (the line we are going to drive on) 
 		  vector<double> mpc_x_vals = mpc.mpc_x;
 		  vector<double> mpc_y_vals = mpc.mpc_y;
@@ -160,13 +159,11 @@ int main() {
 			  next_y_vals.push_back(polyeval(coeffs, poly_inc*i));
 		  } 
 				  
-		  // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
-		  // Otherwise the values will be in between [-deg2rad(25), deg2rad(25] instead of [-1, 1].
+		  
 		  json msgJson;
 		  msgJson["steering_angle"] = -steer_value;
 		  msgJson["throttle"] = throttle_value;
-		  //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
-		  // the points in the simulator are connected by a Yellow line
+		  //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system the points in the simulator are connected by a Yellow line
 		  msgJson["next_x"] = next_x_vals;
 		  msgJson["next_y"] = next_y_vals;
 		  msgJson["mpc_x"] = mpc_x_vals;

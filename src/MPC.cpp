@@ -8,7 +8,7 @@ using namespace std;
 using CppAD::AD;
 
 // TODO: Set the timestep length and duration - set as default (10,0.1) to predisct 1 second into the future
-size_t N = NUMBER_OF_STEPS; // (20 timestamps)
+const size_t N = NUMBER_OF_STEPS; // (10 timestamps)
 const double dt = 0.1; //0.1 second between timestamps
 
 // This value assumes the model presented in the classroom is used.
@@ -37,8 +37,7 @@ class FG_eval {
   // Fitted polynomial coefficients
   Eigen::VectorXd coeffs;
   FG_eval(Eigen::VectorXd coeffs) { this->coeffs = coeffs; }
-  //std::cout << "vars \n " << vars << std::endl;
-
+  
   typedef CPPAD_TESTVECTOR(AD<double>) ADvector;
   void operator()(ADvector& fg, const ADvector& vars) {
     // TODO: implement MPC. `fg` is a vector of the cost constraints, `vars` is a vector of variable values (state & actuators)
@@ -47,20 +46,20 @@ class FG_eval {
 	  fg[0] = 0;
 	  for (int i = 0; i < N; i++)
 	  {
-		  fg[0] += 500 * CppAD::pow(vars[cte_start + i] - ref_cte, 2);		//cte & psi are the two most importat params  
-		  fg[0] += 500 * CppAD::pow(vars[epsi_start + i] - epsi_start, 2);	//setting their weight to the highest value of 2000
-		  fg[0] += CppAD::pow(vars[v_start + i] - ref_v, 2);
+		  fg[0] += 9 * CppAD::pow(vars[cte_start + i] - ref_cte, 2);		//cte & psi are the two most importat params  
+		  fg[0] += 0.32 * CppAD::pow(vars[epsi_start + i] - epsi_start, 2);	//setting their weight to the highest value of 2000
+		  fg[0] += 0.261*CppAD::pow(vars[v_start + i] - ref_v, 2);
 
 	  }
 	  for (int i = 0; i < N-1; i++)
 	  {
-		  fg[0] += 5 * CppAD::pow(vars[delta_start + i], 2);
-		  fg[0] += 5 * CppAD::pow(vars[a_start + i], 2);
+		  fg[0] += 500 * CppAD::pow(vars[delta_start + i], 2);
+		  fg[0] += 17 * CppAD::pow(vars[a_start + i], 2);
 	  }
 	  for (int i = 0; i < N-2; i++)
 	  {
-		  fg[0] += 400 * CppAD::pow(vars[delta_start + i + 1] - vars[delta_start+i], 2); //smoothness of the steering angle also relatively high weight
-		  fg[0] += 10 * CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
+		  fg[0] += 0.01 * CppAD::pow(vars[delta_start + i + 1] - vars[delta_start+i], 2); //smoothness of the steering angle also relatively high weight
+		  fg[0] += 0.00001 * CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
 	  }
 
 	  fg[1 + x_start] = vars[x_start];
