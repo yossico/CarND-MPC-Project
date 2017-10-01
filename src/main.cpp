@@ -114,8 +114,8 @@ int main() {
 			  const double shift_x = ptsx[i] - px;
 			  const double shift_y = ptsy[i] - py;
 			  //adapting path points to the new location of the car as 0,0
-			  ptsxT[i] = (shift_x*cos(0 - psi) - shift_y*sin(0 - psi));
-			  ptsyT[i] = (shift_x*sin(0 - psi) + shift_y*cos(0 - psi));
+			  ptsxT[i] = (shift_x*cos(-psi) - shift_y*sin(-psi));
+			  ptsyT[i] = (shift_x*sin(-psi) + shift_y*cos(-psi));
 		  }
 
 		  //find the coefficients of a 3rd degree polynomial which fit the waypoints
@@ -153,8 +153,8 @@ int main() {
 		  for (int i = 0; i < ptsx.size(); i++)
 		  {
 			  //the waypoints/reference line (desired trajectory) calculated using the polyfit with the coeffs
-			  next_x_vals.push_back(poly_inc*i);
-			  next_y_vals.push_back(polyeval(coeffs, poly_inc*i));
+			  next_x_vals.push_back(ptsxT[i]);// poly_inc*i);
+			  next_y_vals.push_back(ptsyT[i]);// polyeval(coeffs, poly_inc*i));
 		  } 
 				  
 		  

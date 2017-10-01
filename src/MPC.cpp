@@ -8,7 +8,7 @@ using namespace std;
 using CppAD::AD;
 
 // TODO: Set the timestep length and duration - set as default (10,0.1) to predisct 1 second into the future
-const size_t N = NUMBER_OF_STEPS; // (10 timestamps)
+const size_t N = NUMBER_OF_STEPS; // (20 timestamps)
 const double dt = 0.1; //0.1 second between timestamps
 
 // This value assumes the model presented in the classroom is used.
@@ -140,16 +140,15 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // TODO: Set lower and upper limits for variables.
   Dvector vars_lowerbound(n_vars);
   Dvector vars_upperbound(n_vars);
-  // Lower and upper limits for the constraints
-  // Should be 0 besides initial state.
-  Dvector constraints_lowerbound(n_constraints);
-  Dvector constraints_upperbound(n_constraints);
-  for (int i = 0; i < n_constraints; i++) {
-	vars_lowerbound[i] = -BOUND;
-	vars_upperbound[i] = BOUND;
-  }
+
   // The upper and lower limits of delta are set to -25 and 25
   // degrees (values in radians).
+  // Lower and upper limits for the constraints
+  // Should be 0 besides initial state.
+  for (int i = 0; i < delta_start; i++) {
+	  vars_lowerbound[i] = -BOUND;
+	  vars_upperbound[i] = BOUND;
+  }
   for (int i = delta_start; i < a_start; i++) {
 	  vars_lowerbound[i] = -DED25RAD;
 	  vars_upperbound[i] = DED25RAD;
@@ -160,10 +159,14 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
 	  vars_upperbound[i] = MAXTHR;
   }
   // Lower and upper limits for the constraints Should be 0 besides initial state.
+  Dvector constraints_lowerbound(n_constraints);
+  Dvector constraints_upperbound(n_constraints);
   for (int i = 0; i < n_constraints; i++) {
 	  constraints_lowerbound[i] = 0;
 	  constraints_upperbound[i] = 0;
   }
+
+
   //set the values to initial state value using constraints 
   constraints_lowerbound[x_start] = x;
   constraints_lowerbound[y_start] = y;
