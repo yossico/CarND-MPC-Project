@@ -102,10 +102,8 @@ int main() {
 		  const double v = v_mph * 0.447;// mph to m/s
 		  const double steering_angle = j[1]["steering_angle"];
 		  const double throttle = j[1]["throttle"];
-
-          /*
-          * TODO: Calculate steering angle and throttle using MPC.          *
-          * Both are in between [-1, 1]. */
+		            
+          /* TODO: Calculate steering angle and throttle using MPC. Both are in between [-1, 1]. */
 
 		  const int N = ptsx.size();  
 		  //OriginTransform()
@@ -144,7 +142,7 @@ int main() {
 
 		  double steer_value = mpc_solution[0] / deg2rad(25); // divide by deg2rad(25), convert to [-1..1] range
 		  double throttle_value = mpc_solution[1];
-		  //Display the MPC predicted trajectory (the line we are going to drive on) 
+		  //Display the MPC predicted trajectory (the GREEN line we are going to drive on) 
 		  vector<double> mpc_x_vals = mpc.mpc_x;
 		  vector<double> mpc_y_vals = mpc.mpc_y;
 
@@ -155,8 +153,8 @@ int main() {
 		  for (int i = 0; i < ptsx.size(); i++)
 		  {
 			  //the waypoints/reference line (desired trajectory) calculated using the polyfit with the coeffs
-			  next_x_vals.push_back(ptsxT[i]);//(poly_inc*i);
-			  next_y_vals.push_back(ptsyT[i]);// polyeval(coeffs, poly_inc*i));
+			  next_x_vals.push_back(poly_inc*i);
+			  next_y_vals.push_back(polyeval(coeffs, poly_inc*i));
 		  } 
 				  
 		  
