@@ -92,17 +92,16 @@ class FG_eval {
 		  AD<double> delta0 = vars[delta_start + i];
 		  AD<double> a0 = vars[a_start + i];
 
-		  AD<double> f0 = 0.0;
-		  AD<double> psides0 = 0.0;
-		  f0 += coeffs[0] * coeffs[1] * x0 + coeffs[2] * x0*x0 + coeffs[3] * x0*x0*x0;
-		  psides0 += CppAD::atan(3*coeffs[3]*x0*x0 + 2*coeffs[2]*x0+ coeffs[1]);
-		 
+		  
+		  AD<double> f0 = coeffs[0] + coeffs[1] * x0 + coeffs[2] * pow(x0, 2) + coeffs[3] * pow(x0, 3);
+		  AD<double> psi_des0 = CppAD::atan(coeffs[1] + 2 * coeffs[2] * x0 + 3 * coeffs[3] * pow(x0, 2));
+
 		  fg[2 + x_start + i] = x1 - (x0 + v0 * CppAD::cos(psi0) * DT);
 		  fg[2 + y_start + i] = y1 - (y0 + v0 * CppAD::sin(psi0) * DT);
 		  fg[2 + psi_start + i] = psi1 - (psi0 + v0 * delta0 / LF * DT);
 		  fg[2 + v_start + i] = v1 - (v0 + a0 * DT);
 		  fg[2 + cte_start + i] = cte1 - ((f0 - y0) + (v0 * CppAD::sin(epsi0) * DT));
-		  fg[2 + epsi_start + i] = epsi1 - ((psi0 - psides0) + v0 * delta0 / LF * DT);
+		  fg[2 + epsi_start + i] = epsi1 - ((psi0 - psides0) + v0 * delta0/LF * DT);
 	  }
   }
 };
@@ -186,10 +185,8 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   std::string options;
   // Uncomment this if you'd like more print information
   options += "Integer print_level  0\n";
-  // NOTE: Setting sparse to true allows the solver to take advantage
-  // of sparse routines, this makes the computation MUCH FASTER. If you
-  // can uncomment 1 of these and see if it makes a difference or not but
-  // if you uncomment both the computation time should go up in orders of
+  // NOTE: Setting sparse to true allows the solver to take advantage of sparse routines, this makes the computation MUCH FASTER. If you can 
+  // uncomment 1 of these and see if it makes a difference or not but if you uncomment both the computation time should go up in orders of
   // magnitude.
   options += "Sparse  true forward\n";
   options += "Sparse  true reverse\n";
@@ -202,8 +199,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
 
   // solve the problem
   CppAD::ipopt::solve<Dvector, FG_eval>(
-	  options, vars, vars_lowerbound, vars_upperbound, constraints_lowerbound,
-	  constraints_upperbound, fg_eval, solution);
+	  options, vars, vars_lowerbound, vars_upperbound, constraints_lowerbound, constraints_upperbound, fg_eval, solution);
 
   // Check some of the solution values
   ok &= solution.status == CppAD::ipopt::solve_result<Dvector>::success;
