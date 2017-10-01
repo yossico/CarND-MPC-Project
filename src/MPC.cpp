@@ -21,7 +21,7 @@ const double dt = 0.1; //0.1 second between timestamps
 const double LF = 2.67;
 double ref_cte = 0;
 double ref_epsi = 0;
-double ref_v = 25;//was 100 in walkthough try to be a bit safer
+double ref_v = 50;//was 100 in walkthough try to be a bit safer
 
 size_t x_start = 0;
 size_t y_start = x_start + N;

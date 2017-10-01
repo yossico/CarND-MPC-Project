@@ -24,7 +24,7 @@ using namespace std;
 #define W_V 20
 #define W_DELTA 60
 #define W_A 17.1
-#define W_DDELTA 0.01
+#define W_DDELTA 30
 #define W_DA 0.00001
 
 class MPC {
