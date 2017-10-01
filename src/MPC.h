@@ -28,7 +28,7 @@ using namespace std;
 #define W_DA 10*/
 
 #define W_CTE 100
-#define W_EPSI 50
+#define W_EPSI 5
 #define W_V 0.261
 #define W_DELTA 6
 #define W_A 17.1
