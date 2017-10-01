@@ -155,8 +155,8 @@ int main() {
 		  for (int i = 0; i < ptsx.size(); i++)
 		  {
 			  //the waypoints/reference line (desired trajectory) calculated using the polyfit with the coeffs
-			  next_x_vals.push_back(poly_inc*i);
-			  next_y_vals.push_back(polyeval(coeffs, poly_inc*i));
+			  next_x_vals.push_back(ptsxT);//(poly_inc*i);
+			  next_y_vals.push_back(ptsyT);// polyeval(coeffs, poly_inc*i));
 		  } 
 				  
 		  
