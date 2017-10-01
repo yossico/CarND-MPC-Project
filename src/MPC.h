@@ -19,13 +19,13 @@ using namespace std;
 #define REF_V 77.5
 
 // Set weights parameters for the cost function
-#define W_CTE 500
-#define W_EPSI 500
+#define W_CTE 1000
+#define W_EPSI 1000
 #define W_V 20
 #define W_DELTA 60
-#define W_A 17.1
+#define W_A 20
 #define W_DDELTA 30
-#define W_DA 0.00001
+#define W_DA 20
 
 class MPC {
  public:

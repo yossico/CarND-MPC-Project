@@ -45,21 +45,21 @@ class FG_eval {
 	  //reference state cost function as show in class
 	  fg[0] = 0;
 	  for (int i = 0; i < N; i++) {
-		  fg[0] += W_CTE * CppAD::pow(vars[cte_start + i] - REF_CTE, 2);
-		  fg[0] += W_EPSI * CppAD::pow(vars[epsi_start + i] - REF_EPSI, 2);
-		  fg[0] += W_V * CppAD::pow(vars[v_start + i] - REF_V, 2);
+		  fg[0] += W_CTE * CppAD::pow(vars[cte_start + i] - REF_CTE, 2);     // weighting the CTE
+		  fg[0] += W_EPSI * CppAD::pow(vars[epsi_start + i] - REF_EPSI, 2);  // weighting the angle
+		  fg[0] += W_V * CppAD::pow(vars[v_start + i] - REF_V, 2);           //weighting the speed difference
 	  }
 
 	  // Minimize the use of actuators.
 	  for (int i = 0; i < N - 1; i++) {
-		  fg[0] += W_DELTA * CppAD::pow(vars[delta_start + i], 2);
+		  fg[0] += W_DELTA * CppAD::pow(vars[delta_start + i], 2);    
 		  fg[0] += W_A * CppAD::pow(vars[a_start + i], 2);
 	  }
 
 	  // Minimize the value gap between sequential actuations.
 	  for (int i = 0; i < N - 2; i++) {
-		  fg[0] += W_DDELTA * CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
-		  fg[0] += W_DA * CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
+		  fg[0] += W_DDELTA * CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2); //weighting steering differences
+		  fg[0] += W_DA * CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);  //weighting acceleration diffrences
 	  }
 
 	  fg[1 + x_start] = vars[x_start];
