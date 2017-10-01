@@ -21,7 +21,7 @@ constexpr double pi() { return M_PI; }
 double deg2rad(double x) { return x * pi() / 180; }
 double rad2deg(double x) { return x * 180 / pi(); }
 const double dt = 0.1; //0.1 second between timestamps
-const double LF = 2.67; //0.1 second between timestamps
+const double Lf = 2.67; //0.1 second between timestamps
 
 
 
@@ -128,7 +128,7 @@ int main() {
 		  // Kinematic model used to predict vehicle state at current_time +dt 
 		  const double px_act = v * dt;
 		  const double py_act = 0;
-		  const double psi_act = -v * steering_angle * dt / LF;
+		  const double psi_act = -v * steering_angle * dt / Lf;
 		  const double v_act = v + throttle * dt;
 		  const double cte_act = cte + v * sin(epsi) * dt;
 		  const double epsi_act = epsi + psi_act;
