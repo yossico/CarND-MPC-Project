@@ -8,6 +8,8 @@
 
 using namespace std;
 
+#define NUMBER_OF_STEPS 20
+#define LF 2.67
 #define REF_CTE 0
 #define REF_EPSI 0
 #define REF_V 77.5
