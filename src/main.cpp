@@ -73,8 +73,10 @@ Eigen::VectorXd polyfit(VectorXd xvals, VectorXd yvals, int order)
   return result;
 }
 
-void OriginTransform(VectorXd &px, VectorXd& py, VectorXd &TX, VectorXd& Ty, double x, double y, double psi)
+/*
+void OriginTransform(VectorXd &px, VectorXd& py, VectorXd &Tx, VectorXd& Ty, double x, double y, const double psi)
 {
+	const int N = px.size();
 	for (int i = 0; i < N; i++)
 	{	  //adapting car location to 0,0	
 		const double shift_x = px[i] - x;
@@ -83,7 +85,7 @@ void OriginTransform(VectorXd &px, VectorXd& py, VectorXd &TX, VectorXd& Ty, dou
 		Tx[i] = (shift_x*cos(-psi) - shift_y*sin(-psi));
 		Ty[i] = (shift_x*sin(-psi) + shift_y*cos(-psi));
 	}
-}
+}*/
 
 int main() {
   uWS::Hub h;
@@ -121,15 +123,15 @@ int main() {
 		  
 		  VectorXd ptsxT(N);
 		  VectorXd ptsyT(N);
-		  OriginTransform(&px, &py, &ptsxT, &ptsyT, px, py, psi);
-/*		  for (int i = 0; i < N; i++)
+		  //OriginTransform(&px, &py, &ptsxT, &ptsyT, px, py,  psi);
+		  for (int i = 0; i < N; i++)
 		  {	  //adapting car location to 0,0	
 			  const double shift_x = ptsx[i] - px;
 			  const double shift_y = ptsy[i] - py;
 			  //adapting path points to the new location of the car as 0,0
 			  ptsxT[i] = (shift_x*cos(-psi) - shift_y*sin(-psi));
 			  ptsyT[i] = (shift_x*sin(-psi) + shift_y*cos(-psi));
-		  }*/
+		  }
 
 		  //find the coefficients of a 3rd degree polynomial which fit the waypoints
 		  auto coeffs = polyfit(ptsxT, ptsyT, 3);
