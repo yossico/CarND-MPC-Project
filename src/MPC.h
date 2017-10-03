@@ -13,7 +13,7 @@ using namespace std;
 #define REF_CTE 0
 #define REF_EPSI 0
 #define REF_V 77.5
-
+/*
 // Set weights parameters for the cost function
 #define W_CTE 8.4
 #define W_EPSI 0.32
@@ -22,6 +22,7 @@ using namespace std;
 #define W_A 17.1
 #define W_DDELTA 0.01
 #define W_DA 0.00001
+*/
 
 // Set lower and upper limits for variables.
 #define DED25RAD 0.436332 // 25 deg in rad, used as delta bound
@@ -30,13 +31,13 @@ using namespace std;
 
 
 // Set weights parameters for the cost function
-/*#define W_CTE 2000
+#define W_CTE 2000
 #define W_EPSI 2000
 #define W_V 1
 #define W_DELTA 10
 #define W_A 10
 #define W_DDELTA 100
-#define W_DA 10*/
+#define W_DA 10
 
 class MPC {
  public:
