@@ -63,7 +63,7 @@ class FG_eval {
 
     // The rest of the constraints
     for (int i = 0; i < N - 1; i++) {
-      // The state at time t+1 .
+      //use CppAD vars according to solution of section 9 of MPC lesson. The state at time t+1 .
       AD<double> x1 = vars[x_start + i + 1];
       AD<double> y1 = vars[y_start + i + 1];
       AD<double> psi1 = vars[psi_start + i + 1];
@@ -119,15 +119,13 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   const double v = state[3];
   const double cte = state[4];
   const double epsi = state[5];
-  // Set the number of model variables (includes both states and inputs).
-  // For example: If the state is a 4 element vector, the actuators is a 2
+  // Set the number of model variables (includes both states and inputs). For example: If the state is a 6 element vector, the actuators is a 2
   // element vector and there are 10 timesteps. The number of variables is:
   size_t n_vars = N * 6 + (N - 1) * 2;
   // Set the number of constraints
   size_t n_constraints = N * 6;
 
-  // Initial value of the independent variables.
-  // SHOULD BE 0 besides initial state.
+  // Initial value of the independent variables.should be 0 besides initial state.
   Dvector vars(n_vars);
   for (int i = 0; i < n_vars; i++) {
     vars[i] = 0;
@@ -146,13 +144,12 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
     vars_lowerbound[i] = -DED25RAD;
     vars_upperbound[i] = DED25RAD;
   }
-  // Acceleration/decceleration upper and lower limits
+  // Acceleration/decceleration upper and lower limits to 1/-1
   for (int i = a_start; i < n_vars; i++) {
     vars_lowerbound[i] = -MAXTHR;
     vars_upperbound[i] = MAXTHR;
   }
-  
-  
+    
   // Lower and upper limits for the constraints
   // Should be 0 besides initial state.
   Dvector constraints_lowerbound(n_constraints);

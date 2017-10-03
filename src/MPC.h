@@ -29,17 +29,6 @@ using namespace std;
 #define MAXTHR 1.0 // Maximal a value
 #define BOUND 1.0e3 // Bound value for other variables
 
-/*
-// Set weights parameters for the cost function
-#define W_CTE 2000
-#define W_EPSI 2000
-#define W_V 1
-#define W_DELTA 10
-#define W_A 10
-#define W_DDELTA 100
-#define W_DA 10
-*/
-
 class MPC {
  public:
   MPC();
