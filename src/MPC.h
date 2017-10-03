@@ -20,7 +20,7 @@ using namespace std;
 #define W_V  20
 #define W_DELTA 100000
 #define W_A 20
-#define W_DDELTA 0.01
+#define W_DDELTA 30
 #define W_DA 10
 
 

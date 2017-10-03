@@ -73,6 +73,18 @@ Eigen::VectorXd polyfit(VectorXd xvals, VectorXd yvals, int order)
   return result;
 }
 
+void OriginTransform(VectorXd &px, VectorXd& py, VectorXd &TX, VectorXd& Ty, double x, double y, double psi)
+{
+	for (int i = 0; i < N; i++)
+	{	  //adapting car location to 0,0	
+		const double shift_x = px[i] - x;
+		const double shift_y = py[i] - y;
+		//adapting path points to the new location of the car as 0,0
+		Tx[i] = (shift_x*cos(-psi) - shift_y*sin(-psi));
+		Ty[i] = (shift_x*sin(-psi) + shift_y*cos(-psi));
+	}
+}
+
 int main() {
   uWS::Hub h;
 
@@ -106,17 +118,18 @@ int main() {
           /* TODO: Calculate steering angle and throttle using MPC. Both are in between [-1, 1]. */
 
 		  const int N = ptsx.size();  
-		  //OriginTransform()
+		  
 		  VectorXd ptsxT(N);
 		  VectorXd ptsyT(N);
-		  for (int i = 0; i < N; i++)
+		  OriginTransform(&px, &py, &ptsxT, &ptsyT, px, py, psi);
+/*		  for (int i = 0; i < N; i++)
 		  {	  //adapting car location to 0,0	
 			  const double shift_x = ptsx[i] - px;
 			  const double shift_y = ptsy[i] - py;
 			  //adapting path points to the new location of the car as 0,0
 			  ptsxT[i] = (shift_x*cos(-psi) - shift_y*sin(-psi));
 			  ptsyT[i] = (shift_x*sin(-psi) + shift_y*cos(-psi));
-		  }
+		  }*/
 
 		  //find the coefficients of a 3rd degree polynomial which fit the waypoints
 		  auto coeffs = polyfit(ptsxT, ptsyT, 3);
